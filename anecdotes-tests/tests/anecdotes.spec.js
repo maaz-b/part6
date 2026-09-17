@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// const dbPath = path.join(__dirname, "..", "db-test.json");
-const dbPath = path.join(__dirname, "..", "..", "anecdotes", "db.json");
+const dbPath = path.join(__dirname, "..", "db-test.json");
+//const dbPath = path.join(__dirname, "..", "..", "anecdotes", "db.json");
 
 // Kept in sync with db.json, deliberately NOT sorted by votes so that
 // sorting behaviour actually has something to prove.
