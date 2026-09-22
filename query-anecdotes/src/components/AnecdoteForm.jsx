@@ -1,10 +1,14 @@
+import { useAnecdotes } from "../hooks/queries/useAnecdotes";
+
 const AnecdoteForm = () => {
+  const { addAnecdote } = useAnecdotes();
   const onCreate = (event) => {
-    event.preventDefault()
-    const content = event.target.anecdote.value
-    event.target.reset()
-    console.log('new anecdote')
-  }
+    event.preventDefault();
+    const content = event.target.anecdote.value;
+    addAnecdote({ content, votes: 0 });
+    event.target.reset();
+    console.log("new anecdote");
+  };
 
   return (
     <div>
@@ -14,7 +18,7 @@ const AnecdoteForm = () => {
         <button type="submit">create</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default AnecdoteForm
+export default AnecdoteForm;
