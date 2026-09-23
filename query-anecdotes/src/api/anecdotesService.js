@@ -1,13 +1,20 @@
 const baseUrl = "http://localhost:3001/anecdotes";
 const headers = { "Content-Type": "application/json" };
 
+const checkResponse = async (response) => {
+  if (!response.ok) {
+    const errorData = await response.json();
+    if (errorData.error) {
+      throw errorData.error;
+    }
+    throw "Something went wrong";
+  }
+};
+
 const getAllAnecdotes = async () => {
   const response = await fetch(baseUrl);
 
-  if (!response.ok) {
-    throw "Something went wrong";
-  }
-
+  await checkResponse(response);
   return await response.json();
 };
 
@@ -19,10 +26,7 @@ const createAnecdote = async (newAnecdote) => {
   };
   const response = await fetch(baseUrl, options);
 
-  if (!response.ok) {
-    throw "Something went wrong";
-  }
-
+  await checkResponse(response);
   return await response.json();
 };
 
@@ -35,10 +39,7 @@ const updateAnecdote = async (newAnecdote) => {
 
   const response = await fetch(`${baseUrl}/${newAnecdote.id}`, options);
 
-  if (!response.ok) {
-    throw "Something went wrong";
-  }
-
+  await checkResponse(response);
   return await response.json();
 };
 

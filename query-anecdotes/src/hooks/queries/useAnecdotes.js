@@ -5,10 +5,13 @@ import {
   updateAnecdote,
 } from "../../api/anecdotesService";
 
+import { useNotify } from "../useNotify";
+
 const useAnecdotes = () => {
   const queryClient = useQueryClient();
+  const { notify } = useNotify();
 
-  const query = useQuery({
+  const result = useQuery({
     queryKey: ["anecdotes"],
     queryFn: getAllAnecdotes,
     refetchOnWindowFocus: false,
@@ -20,6 +23,11 @@ const useAnecdotes = () => {
     onSuccess: (newAnecdote) => {
       const oldAnecdotes = queryClient.getQueryData(["anecdotes"]);
       queryClient.setQueryData(["anecdotes"], oldAnecdotes.concat(newAnecdote));
+      notify(`anecdote '${newAnecdote.content}' created`);
+    },
+    onError: (error) => {
+      console.log(error);
+      notify(error);
     },
   });
 
@@ -31,13 +39,18 @@ const useAnecdotes = () => {
         anecdote.id === newAnecdote.id ? newAnecdote : anecdote,
       );
       queryClient.setQueryData(["anecdotes"], newAnecdotes);
+      notify(`anecdote '${newAnecdote.content}' voted`);
+    },
+    onError: (error) => {
+      console.log(error);
+      notify(error);
     },
   });
 
   return {
-    anecdotes: query.data,
-    isPending: query.isPending,
-    isError: query.isError,
+    anecdotes: result.data,
+    isPending: result.isPending,
+    isError: result.isError,
     addAnecdote: (anecdote) => createMutation.mutate(anecdote),
     updateAnecdote: (anecdote) => updateMutation.mutate(anecdote),
   };
